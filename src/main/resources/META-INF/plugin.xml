@@ -1,0 +1,31 @@
+<idea-plugin>
+    <id>com.chilik1020.module.generator</id>
+    <name>Prior Module Generator</name>
+    <vendor>Andrey Demchuk</vendor>
+    <idea-version since-build="182"/>
+
+    <description><![CDATA[
+    PriorOnline module generator plugin.<br><br>
+    ]]></description>
+
+    <depends>com.intellij.modules.lang</depends>
+    <depends>org.jetbrains.kotlin</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <defaultProjectTypeProvider type="Android"/>
+        <projectConfigurable
+                instance="ui.feature.settings.FeatureSettingsConfigurable">
+        </projectConfigurable>
+        <projectService serviceImplementation="data.FeatureGeneratorComponent"/>
+    </extensions>
+
+    <actions>
+        <action id="NewFeatureAction"
+                class="ui.feature.generator.NewFeatureAnAction"
+                text="PriorOnline Module..."
+                description="PriorOnline module generator plugin">
+            <add-to-group group-id="NewProjectOrModuleGroup" anchor="after"
+                          relative-to-action="NewProjectOrModuleGroup"/>
+        </action>
+    </actions>
+</idea-plugin>
