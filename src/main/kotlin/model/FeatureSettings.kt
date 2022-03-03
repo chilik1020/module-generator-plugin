@@ -78,5 +78,53 @@ private fun generateDefaultFiles() = mutableListOf(
         name = ANDROID_MANIFEST_FILE_NAME,
         content = MANIFEST_TEMPLATE,
         fileType = FileType.MANIFEST
+    ),
+    File(
+        moduleType = ModuleType.KMM_DEFAULT,
+        name = ANDROID_MANIFEST_FILE_NAME,
+        content = MANIFEST_TEMPLATE,
+        fileType = FileType.MANIFEST
+    ),
+    File(
+        moduleType = ModuleType.KMM_DEFAULT,
+        name = GRADLE_BUILD_FILE_NAME,
+        content = DEFAULT_GRADLE_TEMPLATE,
+        fileType = FileType.GRADLE
+    ),
+    File(
+        moduleType = ModuleType.KMM_GATEWAY,
+        name = ANDROID_MANIFEST_FILE_NAME,
+        content = MANIFEST_TEMPLATE,
+        fileType = FileType.MANIFEST
+    ),
+    File(
+        moduleType = ModuleType.KMM_GATEWAY,
+        name = GRADLE_BUILD_FILE_NAME,
+        content = DEFAULT_GRADLE_TEMPLATE,
+        fileType = FileType.GRADLE
+    ),
+    File(
+        moduleType = ModuleType.KMM_DOMAIN,
+        name = ANDROID_MANIFEST_FILE_NAME,
+        content = MANIFEST_TEMPLATE,
+        fileType = FileType.MANIFEST
+    ),
+    File(
+        moduleType = ModuleType.KMM_DOMAIN,
+        name = GRADLE_BUILD_FILE_NAME,
+        content = DEFAULT_GRADLE_TEMPLATE,
+        fileType = FileType.GRADLE
+    ),
+    File(
+        moduleType = ModuleType.KMM_PRESENTATION,
+        name = ANDROID_MANIFEST_FILE_NAME,
+        content = MANIFEST_TEMPLATE,
+        fileType = FileType.MANIFEST
+    ),
+    File(
+        moduleType = ModuleType.KMM_PRESENTATION,
+        name = GRADLE_BUILD_FILE_NAME,
+        content = DEFAULT_GRADLE_TEMPLATE,
+        fileType = FileType.GRADLE
     )
 )

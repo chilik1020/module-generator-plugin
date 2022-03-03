@@ -41,5 +41,5 @@ intellij {
 }
 
 runPluginVerifier {
-    ideVersions "IU-182.5262.2"
+    ideVersions "IU-201.8743.12"
 }

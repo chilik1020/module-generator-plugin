@@ -26,40 +26,82 @@ class FileCreatorImpl @Inject constructor(
     private val sourceRootRepository: SourceRootRepository
 ) : FileCreator {
 
-    override fun createFeatureFiles(newModuleName: String, packageName: String, moduleType: ModuleType, parentModule: Module) {
+    override fun createFeatureFiles(
+        newModuleName: String,
+        packageName: String,
+        moduleType: ModuleType,
+        parentModule: Module
+    ) {
         val parentModuleRootDirectory = findModuleRootDirectory(parentModule) ?: findProjectRootDirectory()
 
-        if (moduleType == ModuleType.FEATURE) {
-            val featureRootDirectory = parentModuleRootDirectory?.run { createSubdirectory(newModuleName) }
-            createModuleFiles(
-                ModuleType.DOMAIN.title,
-                ModuleType.DOMAIN,
-                "$packageName.${ModuleType.DOMAIN.title}",
-                featureRootDirectory!!
+        when (moduleType) {
+            ModuleType.DEFAULT,
+            ModuleType.DOMAIN,
+            ModuleType.PRESENTATION -> createSimpleModuleFiles(
+                newModuleName,
+                moduleType,
+                packageName,
+                parentModuleRootDirectory!!
             )
-
-            createModuleFiles(
-                ModuleType.PRESENTATION.title,
-                ModuleType.PRESENTATION,
-                "$packageName.${ModuleType.PRESENTATION.title}",
-                featureRootDirectory
+            ModuleType.FEATURE -> createSimpleFeatureFiles(
+                newModuleName,
+                packageName,
+                parentModule,
+                parentModuleRootDirectory!!
             )
-            val fullModuleName = if (parentModule.nameWithoutPrefix.isEmpty()) {
-                ":$newModuleName"
-
-            } else {
-                ":${parentModule.nameWithoutPrefix}:$newModuleName"
-            }
-            editSettingsGradleFile(ModuleType.DOMAIN.title, fullModuleName)
-            editSettingsGradleFile(ModuleType.PRESENTATION.title, fullModuleName)
-        } else {
-            createModuleFiles(newModuleName, moduleType, packageName, parentModuleRootDirectory!!)
+            ModuleType.KMM_DEFAULT,
+            ModuleType.KMM_GATEWAY,
+            ModuleType.KMM_DOMAIN,
+            ModuleType.KMM_PRESENTATION -> createKmmModuleFiles(
+                newModuleName,
+                moduleType,
+                packageName,
+                parentModuleRootDirectory!!
+            )
+            ModuleType.KMM_FEATURE -> TODO()
         }
-        val fullModuleName = if (parentModule.nameWithoutPrefix.isEmpty()) String() else ":${parentModule.nameWithoutPrefix}"
+
+        val fullModuleName =
+            if (parentModule.nameWithoutPrefix.isEmpty()) String() else ":${parentModule.nameWithoutPrefix}"
         editSettingsGradleFile(newModuleName, fullModuleName)
     }
 
-    private fun createModuleFiles(moduleName: String, moduleType: ModuleType, packageName: String, parentDirectory: Directory) {
+    private fun createSimpleFeatureFiles(
+        newModuleName: String,
+        packageName: String,
+        parentModule: Module,
+        parentDirectory: Directory
+    ) {
+        val featureRootDirectory = parentDirectory.run { createSubdirectory(newModuleName) }
+        createSimpleModuleFiles(
+            ModuleType.DOMAIN.title,
+            ModuleType.DOMAIN,
+            "$packageName.${ModuleType.DOMAIN.title}",
+            featureRootDirectory!!
+        )
+
+        createSimpleModuleFiles(
+            ModuleType.PRESENTATION.title,
+            ModuleType.PRESENTATION,
+            "$packageName.${ModuleType.PRESENTATION.title}",
+            featureRootDirectory
+        )
+        val fullModuleName = if (parentModule.nameWithoutPrefix.isEmpty()) {
+            ":$newModuleName"
+
+        } else {
+            ":${parentModule.nameWithoutPrefix}:$newModuleName"
+        }
+        editSettingsGradleFile(ModuleType.DOMAIN.title, fullModuleName)
+        editSettingsGradleFile(ModuleType.PRESENTATION.title, fullModuleName)
+    }
+
+    private fun createSimpleModuleFiles(
+        moduleName: String,
+        moduleType: ModuleType,
+        packageName: String,
+        parentDirectory: Directory
+    ) {
         val moduleDirectory = parentDirectory.createSubdirectory(moduleName)
         val srcDir = moduleDirectory.createSubdirectory("src")
         val mainDir = srcDir.createSubdirectory("main")
@@ -78,6 +120,38 @@ class FileCreatorImpl @Inject constructor(
                 FileType.GRADLE -> moduleDirectory.addFile(it)
                 FileType.GIT_IGNORE -> moduleDirectory.addFile(it)
                 FileType.PROGUARD -> moduleDirectory.addFile(it)
+                FileType.KOTLIN -> topPackageDir.addFile(it)
+                else -> {
+                }
+            }
+        }
+    }
+
+    private fun createKmmModuleFiles(
+        moduleName: String,
+        moduleType: ModuleType,
+        packageName: String,
+        parentDirectory: Directory
+    ) {
+        val moduleDirectory = parentDirectory.createSubdirectory(moduleName)
+        val srcDir = moduleDirectory.createSubdirectory("src")
+        val androidMain = srcDir.createSubdirectory("androidMain")
+        val commonMain = srcDir.createSubdirectory("commonMain")
+        val kotlinDir = commonMain.createSubdirectory("kotlin")
+        val packageDirs = packageName.split('.').toMutableList()
+        var topPackageDir = kotlinDir
+        packageDirs.forEach {
+            topPackageDir = topPackageDir.createSubdirectory(it)
+        }
+        featureSettingsRepository.loadModuleFiles(moduleType).forEach {
+            when (it.fileType) {
+                FileType.MANIFEST -> {
+                    it.content = it.content.replace(Variable.PACKAGE_NAME.value, packageName)
+                    androidMain.addFile(it)
+                }
+                FileType.GRADLE -> moduleDirectory.addFile(it)
+            //    FileType.GIT_IGNORE -> moduleDirectory.addFile(it)
+             //   FileType.PROGUARD -> moduleDirectory.addFile(it)
                 FileType.KOTLIN -> topPackageDir.addFile(it)
                 else -> {
                 }

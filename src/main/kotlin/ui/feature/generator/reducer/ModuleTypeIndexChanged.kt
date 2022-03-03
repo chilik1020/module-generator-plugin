@@ -27,6 +27,11 @@ class ModuleTypeIndexChangedReducerImpl @Inject constructor(
             ModuleType.DOMAIN -> ModuleType.DOMAIN.title
             ModuleType.PRESENTATION -> ModuleType.PRESENTATION.title
             ModuleType.FEATURE -> String()
+            ModuleType.KMM_DEFAULT -> String()
+            ModuleType.KMM_GATEWAY -> ModuleType.KMM_GATEWAY.title
+            ModuleType.KMM_DOMAIN -> ModuleType.KMM_DOMAIN.title
+            ModuleType.KMM_PRESENTATION -> ModuleType.KMM_PRESENTATION.title
+            ModuleType.KMM_FEATURE -> String()
         }
         println("Selected module $selectedProjectModule")
         val packageName = selectedProjectModule?.let {
