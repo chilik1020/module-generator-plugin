@@ -38,11 +38,15 @@ class NewFeatureDialog(project: Project, currentPath: CurrentPath?) : DialogWrap
         panel.onModuleNameChanged = { viewModel.reduce(NewFeatureAction.ModuleNameChanged(it)) }
         panel.onParentModuleIndexChanged = { viewModel.reduce(NewFeatureAction.ParentModuleChanged(it)) }
         panel.onPackageNameChanged = { viewModel.reduce(NewFeatureAction.PackageNameChanged(it)) }
+        panel.onKmmGatewayNameChanged = { viewModel.reduce(NewFeatureAction.KmmGatewayNameChanged(it)) }
+        panel.onKmmDomainNameChanged = { viewModel.reduce(NewFeatureAction.KmmDomainNameChanged(it)) }
+        panel.onKmmPresentationNameChanged = { viewModel.reduce(NewFeatureAction.KmmPresentationNameChanged(it)) }
         init()
     }
 
     override fun doOKAction() = viewModel.reduce(
         NewFeatureAction.OkClicked(
+            state = panel.currentState,
             newModuleName = panel.moduleNameTextField.text,
             packageName = panel.packageTextField.text,
             moduleType = panel.moduleTypesComboBox.selectedItem as ModuleType,

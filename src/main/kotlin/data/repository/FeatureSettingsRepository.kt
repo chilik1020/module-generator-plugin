@@ -13,6 +13,9 @@ interface FeatureSettingsRepository {
     fun update(setting: FeatureSettings)
     fun loadModuleTypes(): List<ModuleType>
     fun loadModuleFiles(moduleType: ModuleType): List<File>
+    fun loadDefaultPackage(): String
+    fun loadDefaultKmmPackage(): String
+    fun loadDefaultKmmFeatureSubmodulePrefix(): String
 }
 
 class FeatureSettingsRepositoryImpl @Inject constructor(private val project: Project) : FeatureSettingsRepository {
@@ -34,6 +37,12 @@ class FeatureSettingsRepositoryImpl @Inject constructor(private val project: Pro
     override fun loadModuleTypes(): List<ModuleType> = loadSettings().modules
 
     override fun loadModuleFiles(moduleType: ModuleType) = loadSettings().files.filter { it.moduleType == moduleType }
+
+    override fun loadDefaultPackage(): String = loadSettings().defaultPackage
+
+    override fun loadDefaultKmmPackage(): String = loadSettings().defaultKmmPackage
+
+    override fun loadDefaultKmmFeatureSubmodulePrefix(): String = loadSettings().defaultKmmFeatureSubmodulePrefix
 
     private fun loadSettings() = FeatureGeneratorComponent.getInstance(project).settings
 }

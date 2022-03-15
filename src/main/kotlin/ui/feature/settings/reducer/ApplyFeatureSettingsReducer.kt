@@ -27,7 +27,9 @@ class ApplyFeatureSettingReducerImpl @Inject constructor(
         val newSettings = state.value.run {
             FeatureSettings(
                 modules = modules.map { it.moduleType }.toMutableList(),
-                files = modules.flatMap { it.files }.toMutableList()
+                files = modules.flatMap { it.files }.toMutableList(),
+                defaultPackage = basePackage,
+                defaultKmmPackage = kmmBasePackage
             )
         }
         featureSettingsRepository.update(newSettings)

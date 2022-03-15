@@ -12,9 +12,10 @@ import ui.feature.generator.NewFeatureEffect
 import ui.feature.generator.NewFeatureState
 import javax.inject.Inject
 
-fun interface OkClickReducer {
+interface OkClickReducer {
 
     operator fun invoke(
+        state: NewFeatureState,
         newModuleName: String,
         packageName: String,
         moduleType: ModuleType,
@@ -30,9 +31,9 @@ class FeatureOkClickReducer @Inject constructor(
     private val writeActionDispatcher: WriteActionDispatcher
 ) : BaseReducer<NewFeatureState, NewFeatureEffect>(state, effect, scope), OkClickReducer {
 
-    override fun invoke(newModuleName: String, packageName: String, moduleType: ModuleType, parentModule: Module) {
+    override fun invoke(state: NewFeatureState, newModuleName: String, packageName: String, moduleType: ModuleType, parentModule: Module) {
         writeActionDispatcher.dispatch {
-            fileCreator.createFeatureFiles(newModuleName, packageName, moduleType, parentModule)
+            fileCreator.createFeatureFiles(state, newModuleName, packageName, moduleType, parentModule)
         }
         pushEffect(NewFeatureEffect.Close)
     }

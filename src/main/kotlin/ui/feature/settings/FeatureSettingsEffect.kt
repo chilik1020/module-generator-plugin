@@ -1,5 +1,3 @@
 package ui.feature.settings
 
-sealed class FeatureSettingsEffect {
-
-}
+sealed class FeatureSettingsEffect {}

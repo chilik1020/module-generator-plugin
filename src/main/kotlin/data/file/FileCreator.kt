@@ -3,17 +3,14 @@ package data.file
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import data.repository.FeatureSettingsRepository
 import data.repository.SourceRootRepository
-import model.FileType
-import model.Module
-import model.ModuleType
-import model.Variable
+import model.*
+import ui.feature.generator.NewFeatureState
 import javax.inject.Inject
-
-private const val LAYOUT_DIRECTORY = "layout"
 
 interface FileCreator {
 
     fun createFeatureFiles(
+        state: NewFeatureState,
         newModuleName: String,
         packageName: String,
         moduleType: ModuleType,
@@ -27,43 +24,47 @@ class FileCreatorImpl @Inject constructor(
 ) : FileCreator {
 
     override fun createFeatureFiles(
+        state: NewFeatureState,
         newModuleName: String,
         packageName: String,
         moduleType: ModuleType,
         parentModule: Module
     ) {
-        val parentModuleRootDirectory = findModuleRootDirectory(parentModule) ?: findProjectRootDirectory()
+        val parentModuleRootDirectory = findModuleRootDirectory(state.selectedProjectModule!!) ?: findProjectRootDirectory()
 
         when (moduleType) {
-            ModuleType.DEFAULT,
-            ModuleType.DOMAIN,
-            ModuleType.PRESENTATION -> createSimpleModuleFiles(
-                newModuleName,
-                moduleType,
-                packageName,
+            ModuleType.ANDROID_MODULE -> createSimpleModuleFiles(
+                state.moduleName,
+                state.selectedModuleType!!,
+                state.packageName,
                 parentModuleRootDirectory!!
             )
             ModuleType.FEATURE -> createSimpleFeatureFiles(
-                newModuleName,
-                packageName,
-                parentModule,
+                state.moduleName,
+                state.packageName,
+                state.selectedProjectModule,
                 parentModuleRootDirectory!!
             )
-            ModuleType.KMM_DEFAULT,
-            ModuleType.KMM_GATEWAY,
-            ModuleType.KMM_DOMAIN,
-            ModuleType.KMM_PRESENTATION -> createKmmModuleFiles(
-                newModuleName,
-                moduleType,
-                packageName,
+            ModuleType.KMM_MODULE -> createKmmModuleFiles(
+                state.moduleName,
+                state.selectedModuleType!!,
+                state.packageName,
                 parentModuleRootDirectory!!
             )
-            ModuleType.KMM_FEATURE -> TODO()
+            ModuleType.KMM_FEATURE -> createKmmFeatureFiles(
+                state.moduleName,
+                state.packageName,
+                state.kmmGatewaySubModuleName,
+                state.kmmDomainSubModuleName,
+                state.kmmPresentationSubModuleName,
+                state.selectedProjectModule,
+                parentModuleRootDirectory!!
+            )
         }
 
         val fullModuleName =
-            if (parentModule.nameWithoutPrefix.isEmpty()) String() else ":${parentModule.nameWithoutPrefix}"
-        editSettingsGradleFile(newModuleName, fullModuleName)
+            if (state.selectedProjectModule.nameWithoutPrefix.isEmpty()) String() else ":${state.selectedProjectModule.nameWithoutPrefix}"
+        editSettingsGradleFile(state.moduleName, fullModuleName)
     }
 
     private fun createSimpleFeatureFiles(
@@ -94,6 +95,47 @@ class FileCreatorImpl @Inject constructor(
         }
         editSettingsGradleFile(ModuleType.DOMAIN.title, fullModuleName)
         editSettingsGradleFile(ModuleType.PRESENTATION.title, fullModuleName)
+    }
+
+    private fun createKmmFeatureFiles(
+        newModuleName: String,
+        packageName: String,
+        gatewaySubModuleName: String,
+        domainSubModuleName: String,
+        presentationSubModuleName: String,
+        parentModule: Module,
+        parentDirectory: Directory
+    ) {
+        val featureRootDirectory = parentDirectory.run { createSubdirectory(newModuleName) }
+
+        createKmmModuleFiles(
+            gatewaySubModuleName,
+            ModuleType.KMM_GATEWAY,
+            "$packageName.$GATEWAY_POSTFIX",
+            featureRootDirectory!!
+        )
+
+        createKmmModuleFiles(
+            domainSubModuleName,
+            ModuleType.KMM_DOMAIN,
+            "$packageName.$DOMAIN_POSTFIX",
+            featureRootDirectory!!
+        )
+
+        createKmmModuleFiles(
+            presentationSubModuleName,
+            ModuleType.KMM_PRESENTATION,
+            "$packageName.$PRESENTATION_POSTFIX",
+            featureRootDirectory
+        )
+        val fullModuleName = if (parentModule.nameWithoutPrefix.isEmpty()) {
+            ":$newModuleName"
+        } else {
+            ":${parentModule.nameWithoutPrefix}:$newModuleName"
+        }
+        editSettingsGradleFile(gatewaySubModuleName, fullModuleName)
+        editSettingsGradleFile(domainSubModuleName, fullModuleName)
+        editSettingsGradleFile(presentationSubModuleName, fullModuleName)
     }
 
     private fun createSimpleModuleFiles(
@@ -137,12 +179,13 @@ class FileCreatorImpl @Inject constructor(
         val srcDir = moduleDirectory.createSubdirectory("src")
         val androidMain = srcDir.createSubdirectory("androidMain")
         val commonMain = srcDir.createSubdirectory("commonMain")
-        val kotlinDir = commonMain.createSubdirectory("kotlin")
-        val packageDirs = packageName.split('.').toMutableList()
-        var topPackageDir = kotlinDir
-        packageDirs.forEach {
-            topPackageDir = topPackageDir.createSubdirectory(it)
-        }
+        val iosMain = srcDir.createSubdirectory("iosMain")
+
+
+        val androidTopDir = createPackageDirsHierarchy(androidMain, packageName)
+        val commonTopDir = createPackageDirsHierarchy(commonMain, packageName)
+        val iosTopDir = createPackageDirsHierarchy(iosMain, packageName)
+
         featureSettingsRepository.loadModuleFiles(moduleType).forEach {
             when (it.fileType) {
                 FileType.MANIFEST -> {
@@ -150,13 +193,23 @@ class FileCreatorImpl @Inject constructor(
                     androidMain.addFile(it)
                 }
                 FileType.GRADLE -> moduleDirectory.addFile(it)
-            //    FileType.GIT_IGNORE -> moduleDirectory.addFile(it)
-             //   FileType.PROGUARD -> moduleDirectory.addFile(it)
-                FileType.KOTLIN -> topPackageDir.addFile(it)
+                FileType.GRADLE_DSL -> moduleDirectory.addFile(it)
+                FileType.KOTLIN -> commonTopDir.addFile(it)
                 else -> {
                 }
             }
         }
+    }
+
+    private fun createPackageDirsHierarchy(topDirectory: Directory, packagePath: String): Directory {
+        val kotlinDir = topDirectory.createSubdirectory("kotlin")
+        val packageDirs = packagePath.split('.').toMutableList()
+        var topPackageDir = kotlinDir
+        packageDirs.forEach {
+            topPackageDir = topPackageDir.createSubdirectory(it)
+        }
+
+        return topPackageDir
     }
 
     private fun findModuleRootDirectory(module: Module) =

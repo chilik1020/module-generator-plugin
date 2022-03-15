@@ -38,6 +38,15 @@ abstract class FeatureSettingsModule {
     @Binds
     abstract fun bindUpdateFileReducer(reducer: UpdateFileReducerImpl): UpdateFileReducer
 
+    @Binds
+    abstract fun bindChangePackageReducer(reducerImpl: ChangePackageReducerImpl): ChangePackageReducer
+
+    @Binds
+    abstract fun bindChangeKmmPackageReducer(reducerImpl: ChangeKmmPackageReducerImpl): ChangeKmmPackageReducer
+
+    @Binds
+    abstract fun bindChangeKmmFeatureSubmodulePrefixReducer(reducerImpl: ChangeKmmFeatureSubmodulePrefixReducerImpl): ChangeKmmFeatureSubmodulePrefixReducer
+
     companion object {
 
         @Provides

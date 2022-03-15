@@ -5,7 +5,10 @@ import java.io.Serializable
 
 data class FeatureSettings(
     var modules: MutableList<ModuleType> = defaultModuleTypes(),
-    var files: MutableList<File> = generateDefaultFiles()
+    var files: MutableList<File> = generateDefaultFiles(),
+    var defaultPackage: String = DEFAULT_PACKAGE,
+    var defaultKmmPackage: String = KMM_DEFAULT_PACKAGE,
+    var defaultKmmFeatureSubmodulePrefix: String = KMM_SUB_MODULE_DEFAULT_NAME_TEMPLATE
 ) : Serializable
 
 private fun defaultModuleTypes() = mutableListOf<ModuleType>().apply {
@@ -80,16 +83,16 @@ private fun generateDefaultFiles() = mutableListOf(
         fileType = FileType.MANIFEST
     ),
     File(
-        moduleType = ModuleType.KMM_DEFAULT,
+        moduleType = ModuleType.KMM_MODULE,
         name = ANDROID_MANIFEST_FILE_NAME,
         content = MANIFEST_TEMPLATE,
         fileType = FileType.MANIFEST
     ),
     File(
-        moduleType = ModuleType.KMM_DEFAULT,
+        moduleType = ModuleType.KMM_MODULE,
         name = GRADLE_BUILD_FILE_NAME,
-        content = DEFAULT_GRADLE_TEMPLATE,
-        fileType = FileType.GRADLE
+        content = DEFAULT_GRADLE_DSL_TEMPLATE,
+        fileType = FileType.GRADLE_DSL
     ),
     File(
         moduleType = ModuleType.KMM_GATEWAY,
@@ -100,8 +103,8 @@ private fun generateDefaultFiles() = mutableListOf(
     File(
         moduleType = ModuleType.KMM_GATEWAY,
         name = GRADLE_BUILD_FILE_NAME,
-        content = DEFAULT_GRADLE_TEMPLATE,
-        fileType = FileType.GRADLE
+        content = DEFAULT_GRADLE_DSL_TEMPLATE,
+        fileType = FileType.GRADLE_DSL
     ),
     File(
         moduleType = ModuleType.KMM_DOMAIN,
@@ -112,8 +115,8 @@ private fun generateDefaultFiles() = mutableListOf(
     File(
         moduleType = ModuleType.KMM_DOMAIN,
         name = GRADLE_BUILD_FILE_NAME,
-        content = DEFAULT_GRADLE_TEMPLATE,
-        fileType = FileType.GRADLE
+        content = DEFAULT_GRADLE_DSL_TEMPLATE,
+        fileType = FileType.GRADLE_DSL
     ),
     File(
         moduleType = ModuleType.KMM_PRESENTATION,
@@ -124,7 +127,7 @@ private fun generateDefaultFiles() = mutableListOf(
     File(
         moduleType = ModuleType.KMM_PRESENTATION,
         name = GRADLE_BUILD_FILE_NAME,
-        content = DEFAULT_GRADLE_TEMPLATE,
-        fileType = FileType.GRADLE
+        content = DEFAULT_GRADLE_DSL_TEMPLATE,
+        fileType = FileType.GRADLE_DSL
     )
 )

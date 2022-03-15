@@ -56,6 +56,15 @@ abstract class NewFeatureModule {
     @Binds
     abstract fun bindParentModuleChangedReducer(reducer: ParentModuleIndexChangedReducerImpl): ParentModuleIndexChangedReducer
 
+    @Binds
+    abstract fun bindKmmGatewayNameChangedReducer(reducer: KmmGatewayNameChangedReducerImpl): KmmGatewayNameChangedReducer
+
+    @Binds
+    abstract fun bindKmmDomainNameChangedReducer(reducer: KmmDomainNameChangedReducerImpl): KmmDomainNameChangedReducer
+
+    @Binds
+    abstract fun bindKmmPresentationNameChangedReducer(reducer: KmmPresentationNameChangedReducerImpl): KmmPresentationNameChangedReducer
+
     companion object {
 
         @Provides

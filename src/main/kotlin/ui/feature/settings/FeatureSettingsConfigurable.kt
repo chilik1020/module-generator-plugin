@@ -36,7 +36,10 @@ class FeatureSettingsConfigurable(private val project: Project) : Configurable {
 
         panel.moduleTypesPanel.onItemSelected = { viewModel.reduce(FeatureSettingsAction.SelectModule(it)) }
         panel.moduleFilesPanel.onItemSelected = { viewModel.reduce(FeatureSettingsAction.SelectFile(it)) }
-        panel.onTemplateTextChanged = {viewModel.reduce(FeatureSettingsAction.ChangeTemplate(it))}
+        panel.onTemplateTextChanged = { viewModel.reduce(FeatureSettingsAction.ChangeTemplate(it)) }
+        panel.packagesPanel.onPackageChanged = { viewModel.reduce(FeatureSettingsAction.ChangePackage(it)) }
+        panel.packagesPanel.onKmmPackageChanged = { viewModel.reduce(FeatureSettingsAction.ChangeKmmPackage(it)) }
+        panel.packagesPanel.onSubModulePrefixChanged = { viewModel.reduce(FeatureSettingsAction.ChangeFeatureSubmodulePrefix(it)) }
 
         scope.launch { state.collect { panel.render(it) } }
         scope.launch { effect.collect {} }

@@ -9,7 +9,10 @@ data class FeatureSettingsState(
     val sampleCode: String = "",
     val modules: List<ModuleFiles> = emptyList(),
     val selectedModuleIndex: Int? = null,
-    val selectedFileIndex: Int? = null
+    val selectedFileIndex: Int? = null,
+    val basePackage: String = String(),
+    val kmmBasePackage: String = String(),
+    val featureSubmodulesPrefix: String = String()
 ) {
 
     val selectedModule: ModuleFiles?

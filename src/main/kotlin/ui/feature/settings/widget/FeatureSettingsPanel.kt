@@ -11,6 +11,7 @@ import javax.swing.JPanel
 
 class FeatureSettingsPanel(project: Project) : JPanel() {
 
+    val packagesPanel = PackagesPanel()
     val moduleTypesPanel = ModuleTypesPanel()
     val moduleFilesPanel = ModuleFilesPanel()
     val codePanel = CodePanel(project, KotlinLanguage.INSTANCE, FileType.KOTLIN)
@@ -29,6 +30,7 @@ class FeatureSettingsPanel(project: Project) : JPanel() {
 
             val topPanel = JPanel().apply {
                 layout = BoxLayout(this, BoxLayout.Y_AXIS)
+                add(packagesPanel)
                 add(JBSplitter(0.3f).apply {
                     firstComponent = moduleTypesPanel
                     secondComponent = moduleFilesPanel
@@ -47,6 +49,7 @@ class FeatureSettingsPanel(project: Project) : JPanel() {
     }
 
     fun render(state: FeatureSettingsState) {
+        packagesPanel.render(state)
         moduleTypesPanel.render(state)
         moduleFilesPanel.render(state)
         codePanel.render(state)

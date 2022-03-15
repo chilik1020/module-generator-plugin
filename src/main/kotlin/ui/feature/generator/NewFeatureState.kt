@@ -9,5 +9,8 @@ data class NewFeatureState(
     val modulesTypes: List<ModuleType> = emptyList(),
     val selectedModuleType: ModuleType? = null,
     val projectModules: List<Module> = emptyList(),
-    val selectedProjectModule: Module? = null
+    val selectedProjectModule: Module? = null,
+    val kmmGatewaySubModuleName: String = String(),
+    val kmmDomainSubModuleName: String = String(),
+    val kmmPresentationSubModuleName: String = String()
 )

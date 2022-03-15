@@ -1,13 +1,14 @@
 package ui.feature.generator.reducer
 
+import data.repository.FeatureSettingsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import model.DEFAULT_PACKAGE
 import model.ModuleType
 import ui.feature.base.BaseReducer
 import ui.feature.generator.NewFeatureEffect
 import ui.feature.generator.NewFeatureState
+import util.buildPackage
 import javax.inject.Inject
 
 interface ModuleTypeIndexChangedReducer {
@@ -18,33 +19,28 @@ interface ModuleTypeIndexChangedReducer {
 class ModuleTypeIndexChangedReducerImpl @Inject constructor(
     state: MutableStateFlow<NewFeatureState>,
     effect: MutableSharedFlow<NewFeatureEffect>,
-    scope: CoroutineScope
+    scope: CoroutineScope,
+    private val featureSettings: FeatureSettingsRepository
 ) : BaseReducer<NewFeatureState, NewFeatureEffect>(state, effect, scope), ModuleTypeIndexChangedReducer {
 
     override fun invoke(index: Int) = pushState {
-        val moduleName = when(modulesTypes[index]) {
-            ModuleType.DEFAULT -> String()
-            ModuleType.DOMAIN -> ModuleType.DOMAIN.title
-            ModuleType.PRESENTATION -> ModuleType.PRESENTATION.title
-            ModuleType.FEATURE -> String()
-            ModuleType.KMM_DEFAULT -> String()
-            ModuleType.KMM_GATEWAY -> ModuleType.KMM_GATEWAY.title
-            ModuleType.KMM_DOMAIN -> ModuleType.KMM_DOMAIN.title
-            ModuleType.KMM_PRESENTATION -> ModuleType.KMM_PRESENTATION.title
-            ModuleType.KMM_FEATURE -> String()
+        val moduleName = String()
+
+        val packagePrefix = when (modulesTypes[index]) {
+            ModuleType.ANDROID_MODULE -> featureSettings.loadDefaultPackage()
+            ModuleType.FEATURE -> featureSettings.loadDefaultPackage()
+            ModuleType.KMM_MODULE -> featureSettings.loadDefaultKmmPackage()
+            ModuleType.KMM_FEATURE -> featureSettings.loadDefaultKmmPackage()
+            else -> featureSettings.loadDefaultPackage()
         }
-        println("Selected module $selectedProjectModule")
-        val packageName = selectedProjectModule?.let {
-            if (it.nameWithoutPrefix.isEmpty()) {
-                "$DEFAULT_PACKAGE.$moduleName"
-            } else {
-                "$DEFAULT_PACKAGE.${it.nameWithoutPrefix}.$moduleName"
-            }
-        } ?: "$DEFAULT_PACKAGE.$moduleName"
+        val basePackage = buildPackage(modulesTypes[index], this, this.moduleName, packagePrefix)
         copy(
             selectedModuleType = modulesTypes[index],
             moduleName = moduleName,
-            packageName = packageName
+            packageName = basePackage,
+            kmmGatewaySubModuleName = String(),
+            kmmDomainSubModuleName = String(),
+            kmmPresentationSubModuleName = String()
         )
     }
 }

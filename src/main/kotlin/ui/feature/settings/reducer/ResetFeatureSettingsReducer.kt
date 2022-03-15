@@ -28,7 +28,10 @@ class ResetFeatureSettingsReducerImpl @Inject constructor(
             copy(
                 isModified = false,
                 modules = moduleFiles,
-                selectedModuleIndex = selectedModule
+                selectedModuleIndex = selectedModule,
+                basePackage = featureSettingsRepository.loadDefaultPackage(),
+                kmmBasePackage = featureSettingsRepository.loadDefaultKmmPackage(),
+                featureSubmodulesPrefix = featureSettingsRepository.loadDefaultKmmFeatureSubmodulePrefix()
             )
         }
     }

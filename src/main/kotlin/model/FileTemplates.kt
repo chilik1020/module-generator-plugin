@@ -1,6 +1,11 @@
 package model
 
 const val DEFAULT_PACKAGE = "by.priorbank"
+const val KMM_DEFAULT_PACKAGE = "by.priorbank.shared"
+const val KMM_SUB_MODULE_DEFAULT_NAME_TEMPLATE = "kmm-pi-features"
+const val GATEWAY_POSTFIX = "gateway"
+const val DOMAIN_POSTFIX = "domain"
+const val PRESENTATION_POSTFIX = "presentation"
 
 const val GRADLE_BUILD_FILE_NAME = "build"
 const val PRO_GUARD_FILE_NAME = "proguard-rules"
@@ -134,4 +139,46 @@ const val PRESENTATION_GRADLE_TEMPLATE = "plugins {\n" +
     "}\n" +
     "\n" +
     "dependencies {\n" +
+    "}"
+
+const val DEFAULT_GRADLE_DSL_TEMPLATE = "plugins {\n" +
+    "    kotlin(\"multiplatform\")\n" +
+    "    id(\"com.android.library\")\n" +
+    "}\n" +
+    "\n" +
+    "kotlin {\n" +
+    "    android()\n" +
+    "    ios()\n" +
+    "\n" +
+    "    sourceSets {\n" +
+    "        val commonMain by getting {\n" +
+    "            dependencies {\n" +
+    "                implementation(project(Dependencies.Modules.Shared.Core.Api.Common.MODULE))\n" +
+    "            }\n" +
+    "        }\n" +
+    "        val commonTest by getting {\n" +
+    "            dependencies {\n" +
+    "                implementation(kotlin(\"test-common\"))\n" +
+    "                implementation(kotlin(\"test-annotations-common\"))\n" +
+    "            }\n" +
+    "        }\n" +
+    "        val androidMain by getting\n" +
+    "        val androidTest by getting {\n" +
+    "            dependencies {\n" +
+    "                implementation(kotlin(\"test-junit\"))\n" +
+    "                implementation(\"junit:junit:4.13.2\")\n" +
+    "            }\n" +
+    "        }\n" +
+    "        val iosMain by getting\n" +
+    "        val iosTest by getting\n" +
+    "    }\n" +
+    "}\n" +
+    "\n" +
+    "android {\n" +
+    "    compileSdkVersion(30)\n" +
+    "    sourceSets[\"main\"].manifest.srcFile(\"src/androidMain/AndroidManifest.xml\")\n" +
+    "    defaultConfig {\n" +
+    "        minSdkVersion(21)\n" +
+    "        targetSdkVersion(30)\n" +
+    "    }\n" +
     "}"

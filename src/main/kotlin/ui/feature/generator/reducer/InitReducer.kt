@@ -12,7 +12,7 @@ import ui.feature.generator.NewFeatureEffect
 import ui.feature.generator.NewFeatureState
 import javax.inject.Inject
 
-fun interface InitReducer {
+interface InitReducer {
 
     operator fun invoke()
 }
@@ -31,7 +31,7 @@ class FeatureInitReducer @Inject constructor(
         copy(
             moduleName = String(),
             packageName = packageExtractor.extractFromCurrentPath(),
-            modulesTypes = featureSettingsRepository.loadModuleTypes(),
+            modulesTypes = featureSettingsRepository.loadModuleTypes().filter { it.showInDialog },
             projectModules = moduleRepository.getAllModules(),
             selectedProjectModule = currentPath?.module
         )
