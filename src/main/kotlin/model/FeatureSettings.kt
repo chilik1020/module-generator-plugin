@@ -12,9 +12,7 @@ data class FeatureSettings(
 ) : Serializable
 
 private fun defaultModuleTypes() = mutableListOf<ModuleType>().apply {
-    ModuleType.values().forEach {
-        add(it)
-    }
+    ModuleType.values().forEach { add(it) }
 }
 
 private fun generateDefaultFiles() = mutableListOf(

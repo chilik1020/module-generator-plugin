@@ -22,7 +22,7 @@ class FeatureSettingsRepositoryImpl @Inject constructor(private val project: Pro
 
     override fun loadModuleTypesWithFiles(): List<ModuleFiles> {
         val settings = loadSettings()
-        return settings.modules.map { moduleType ->
+        return settings.modules.filter { it.showInSettings }.map { moduleType ->
             ModuleFiles(
                 moduleType,
                 settings.files.filter { it.moduleType == moduleType }
