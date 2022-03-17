@@ -14,7 +14,7 @@ class FeatureSettingsPanel(project: Project) : JPanel() {
     val packagesPanel = PackagesPanel()
     val moduleTypesPanel = ModuleTypesPanel()
     val moduleFilesPanel = ModuleFilesPanel()
-    val codePanel = CodePanel(project, KotlinLanguage.INSTANCE, FileType.KOTLIN)
+    private val codePanel = CodePanel(project, KotlinLanguage.INSTANCE, FileType.KOTLIN)
 
     var onTemplateTextChanged: ((String) -> Unit)? = null
         set(value) {

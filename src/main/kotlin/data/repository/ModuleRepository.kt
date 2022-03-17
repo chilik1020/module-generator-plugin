@@ -19,9 +19,9 @@ class ModuleRepositoryImpl @Inject constructor(
                 Module(
                     name = it,
                     nameWithoutPrefix = if (it.contains("${projectStructure.getProjectName()}.")) {
-                        it.replace("${projectStructure.getProjectName()}.", "")
+                        it.replace("${projectStructure.getProjectName()}.", String())
                     } else {
-                        it.replace(projectStructure.getProjectName(), "")
+                        it.replace(projectStructure.getProjectName(), String())
                     }
                 )
             }

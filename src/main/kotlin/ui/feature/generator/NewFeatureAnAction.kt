@@ -14,8 +14,8 @@ class NewFeatureAnAction : AnAction() {
 
     override fun actionPerformed(event: AnActionEvent) {
         val currentPath = event.getData(PlatformDataKeys.VIRTUAL_FILE)?.let {
-            val moduleName = ModuleUtil.findModuleForFile(it, event.project!!)?.name ?: ""
-            val module = Module(moduleName, moduleName.replace("${event.project!!.name}.", ""))
+            val moduleName = ModuleUtil.findModuleForFile(it, event.project!!)?.name ?: String()
+            val module = Module(moduleName, moduleName.replace("${event.project!!.name}.", String()))
             CurrentPath(it.path, it.isDirectory, module)
         }
         NewFeatureDialog(event.project!!, currentPath).show()

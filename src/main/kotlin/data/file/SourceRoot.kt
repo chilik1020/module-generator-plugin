@@ -16,8 +16,4 @@ class SourceRootImpl(project: Project, virtualFile: VirtualFile) : SourceRoot {
     override val path = virtualFile.path
 
     override val directory = DirectoryImpl(project, PsiManager.getInstance(project).findDirectory(virtualFile)!!)
-
-    override fun toString(): String {
-        return "SourceRootImpl(path='$path', directory=$directory)"
-    }
 }

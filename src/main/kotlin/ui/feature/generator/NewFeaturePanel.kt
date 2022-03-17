@@ -14,18 +14,17 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JTextField
 
-
 class NewFeaturePanel : JPanel() {
 
-    private val simpleModuleTab = JPanel()
+    private val mainFeatureGeneratorPanel = JPanel()
     val moduleNameTextField = JTextField()
     private val kmmGatewayNameTextField = JTextField()
     private val kmmDomainNameTextField = JTextField()
     private val kmmPresentationNameTextField = JTextField()
-    private val moduleNameLabelTextField = JLabel("Module name:")
-    private val kmmGatewayNameLabelTextField = JLabel("Gateway module name:")
-    private val kmmDomainNameLabelTextField = JLabel("Domain module name:")
-    private val kmmPresentationNameLabelTextField = JLabel("Presentation module name:")
+    private val moduleNameLabelTextField = JLabel(LABEL_MODULE_NAME)
+    private val kmmGatewayNameLabelTextField = JLabel(LABEL_GATEWAY_MODULE_NAME)
+    private val kmmDomainNameLabelTextField = JLabel(LABEL_DOMAIN_MODULE_NAME)
+    private val kmmPresentationNameLabelTextField = JLabel(LABEL_PRESENTATION_MODULE_NAME)
     val packageTextField = JTextField()
     val moduleTypesComboBox = ComboBox<ModuleType>()
     val projectModulesComboBox = ComboBox<Module>()
@@ -42,30 +41,15 @@ class NewFeaturePanel : JPanel() {
     private var listenersBlocked = false
 
     init {
-        initSimpleModulePanel()
+        initMainFeatureGeneratorPanel()
         layout = BoxLayout(this, BoxLayout.Y_AXIS)
-
-//        val tabbedPane = JTabbedPane()
-//        tabbedPane.preferredSize = Dimension(950, 290)
-//        //  tabbedPane.border = BevelBorder(BevelBorder.LOWERED, null, null, null, null)
-//        tabbedPane.addTab("Simple", simpleModuleTab)
-//
-//        val kmm = JTextField("kmm")
-//        tabbedPane.add("KMM", kmm)
-//
-//        val one = JTextField("one")
-//        tabbedPane.add("one", one)
-//
-//        val two = JTextField("two")
-//        tabbedPane.add("two", two)
-//
-//        tabbedPane.isEnabled = true
-//        tabbedPane.tabPlacement = JTabbedPane.TOP;
-
-        add(simpleModuleTab)
+        add(mainFeatureGeneratorPanel)
     }
 
-    override fun getPreferredSize(): Dimension = Dimension(1000, 300)
+    override fun getPreferredSize(): Dimension {
+        val original = super.getPreferredSize()
+        return Dimension(original.width, original.height)
+    }
 
     fun render(state: NewFeatureState) = state.run {
 
@@ -77,25 +61,25 @@ class NewFeaturePanel : JPanel() {
         kmmPresentationNameTextField.updateText(kmmPresentationSubModuleName)
         when (this.selectedModuleType) {
             ModuleType.ANDROID_MODULE -> {
-                moduleNameLabelTextField.text = "Module name:"
+                moduleNameLabelTextField.text = LABEL_MODULE_NAME
                 setKmmSubModulesFieldsVisibility(false)
 
             }
             ModuleType.KMM_MODULE -> {
-                moduleNameLabelTextField.text = "Module name:"
+                moduleNameLabelTextField.text = LABEL_MODULE_NAME
                 setKmmSubModulesFieldsVisibility(false)
             }
             ModuleType.FEATURE -> {
-                moduleNameLabelTextField.text = "Feature name:"
+                moduleNameLabelTextField.text = LABEL_FEATURE_NAME
                 setKmmSubModulesFieldsVisibility(false)
             }
 
             ModuleType.KMM_FEATURE -> {
-                moduleNameLabelTextField.text = "Feature name:"
+                moduleNameLabelTextField.text = LABEL_FEATURE_NAME
                 setKmmSubModulesFieldsVisibility(true)
             }
-            null -> {
-                moduleNameLabelTextField.text = "Module name:"
+            else -> {
+                moduleNameLabelTextField.text = LABEL_MODULE_NAME
                 setKmmSubModulesFieldsVisibility(false)
             }
         }
@@ -117,19 +101,19 @@ class NewFeaturePanel : JPanel() {
         listenersBlocked = false
     }
 
-    private fun initSimpleModulePanel() {
-        with(simpleModuleTab) {
+    private fun initMainFeatureGeneratorPanel() {
+        with(mainFeatureGeneratorPanel) {
             layout = GridBagLayout()
-            add(JLabel("Module type:"), constraintsLeft(0, 0))
+            add(JLabel(LABEL_MODULE_TYPE), constraintsLeft(0, 0))
             add(moduleTypesComboBox, constraintsRight(1, 0))
 
-            add(JLabel("Parent module:"), constraintsLeft(0, 1))
+            add(JLabel(LABEL_PARENT_MODULE_NAME), constraintsLeft(0, 1))
             add(projectModulesComboBox, constraintsRight(1, 1))
 
             add(moduleNameLabelTextField, constraintsLeft(0, 2))
             add(moduleNameTextField, constraintsRight(1, 2))
 
-            add(JLabel("Package:"), constraintsLeft(0, 3))
+            add(JLabel(LABEL_PACKAGE), constraintsLeft(0, 3))
             add(packageTextField, constraintsRight(1, 3))
 
             add(kmmGatewayNameLabelTextField, constraintsLeft(0, 4))
@@ -178,5 +162,16 @@ class NewFeaturePanel : JPanel() {
         kmmGatewayNameLabelTextField.isVisible = isVisible
         kmmDomainNameLabelTextField.isVisible = isVisible
         kmmPresentationNameLabelTextField.isVisible = isVisible
+    }
+
+    companion object {
+        private const val LABEL_PARENT_MODULE_NAME = "Parent module:"
+        private const val LABEL_MODULE_NAME = "Module name:"
+        private const val LABEL_GATEWAY_MODULE_NAME = "Gateway module name:"
+        private const val LABEL_DOMAIN_MODULE_NAME = "Domain module name:"
+        private const val LABEL_PRESENTATION_MODULE_NAME = "Presentation module name:"
+        private const val LABEL_FEATURE_NAME = "Feature name:"
+        private const val LABEL_MODULE_TYPE = "Module type:"
+        private const val LABEL_PACKAGE = "Package:"
     }
 }

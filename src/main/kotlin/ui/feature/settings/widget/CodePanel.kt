@@ -35,13 +35,13 @@ class CodePanel(
 
     private fun createTemplatePanel() =
         JPanel().apply {
-            border = IdeBorderFactory.createTitledBorder("Code Template", true)
+            border = IdeBorderFactory.createTitledBorder(LABEL_CODE_TEMPLATE, true)
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
             add(JBScrollPane(templateTextField))
         }
 
     private fun createLanguageTextField(language: Language, isEnabled: Boolean = true) =
-        LanguageTextField(language, project, "", false).apply {
+        LanguageTextField(language, project, String(), false).apply {
             this.isEnabled = isEnabled
         }
 
@@ -67,4 +67,7 @@ class CodePanel(
         return Dimension(original.width, 400)
     }
 
+    companion object {
+        private const val LABEL_CODE_TEMPLATE = "Code Template"
+    }
 }

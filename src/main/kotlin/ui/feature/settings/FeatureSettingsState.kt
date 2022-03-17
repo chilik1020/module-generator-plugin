@@ -5,8 +5,8 @@ import model.ModuleFiles
 
 data class FeatureSettingsState(
     val isModified: Boolean = false,
-    val templateCode: String = "",
-    val sampleCode: String = "",
+    val templateCode: String = String(),
+    val sampleCode: String = String(),
     val modules: List<ModuleFiles> = emptyList(),
     val selectedModuleIndex: Int? = null,
     val selectedFileIndex: Int? = null,

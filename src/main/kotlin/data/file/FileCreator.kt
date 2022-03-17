@@ -145,9 +145,9 @@ class FileCreatorImpl @Inject constructor(
         parentDirectory: Directory
     ) {
         val moduleDirectory = parentDirectory.createSubdirectory(moduleName)
-        val srcDir = moduleDirectory.createSubdirectory("src")
-        val mainDir = srcDir.createSubdirectory("main")
-        val kotlinDir = mainDir.createSubdirectory("kotlin")
+        val srcDir = moduleDirectory.createSubdirectory(FOLDER_SRC_NAME)
+        val mainDir = srcDir.createSubdirectory(FOLDER_MAIN_NAME)
+        val kotlinDir = mainDir.createSubdirectory(FOLDER_KOTLIN_NAME)
         val packageDirs = packageName.split('.').toMutableList()
         var topPackageDir = kotlinDir
         packageDirs.forEach {
@@ -176,10 +176,10 @@ class FileCreatorImpl @Inject constructor(
         parentDirectory: Directory
     ) {
         val moduleDirectory = parentDirectory.createSubdirectory(moduleName)
-        val srcDir = moduleDirectory.createSubdirectory("src")
-        val androidMain = srcDir.createSubdirectory("androidMain")
-        val commonMain = srcDir.createSubdirectory("commonMain")
-        val iosMain = srcDir.createSubdirectory("iosMain")
+        val srcDir = moduleDirectory.createSubdirectory(FOLDER_SRC_NAME)
+        val androidMain = srcDir.createSubdirectory(FOLDER_ANDROID_MAIN_NAME)
+        val commonMain = srcDir.createSubdirectory(FOLDER_COMMON_MAIN_NAME)
+        val iosMain = srcDir.createSubdirectory(FOLDER_IOS_MAIN_NAME)
 
 
         val androidTopDir = createPackageDirsHierarchy(androidMain, packageName)
@@ -202,7 +202,7 @@ class FileCreatorImpl @Inject constructor(
     }
 
     private fun createPackageDirsHierarchy(topDirectory: Directory, packagePath: String): Directory {
-        val kotlinDir = topDirectory.createSubdirectory("kotlin")
+        val kotlinDir = topDirectory.createSubdirectory(FOLDER_KOTLIN_NAME)
         val packageDirs = packagePath.split('.').toMutableList()
         var topPackageDir = kotlinDir
         packageDirs.forEach {
@@ -224,7 +224,7 @@ class FileCreatorImpl @Inject constructor(
                 val textLength = it.textLength
                 it.insertString(
                     textLength,
-                    "\ninclude '${moduleName.replace('.', ':')}:$featureName'"
+                    "\n$INCLUDE '${moduleName.replace('.', ':')}:$featureName'"
                 )
             }
         }

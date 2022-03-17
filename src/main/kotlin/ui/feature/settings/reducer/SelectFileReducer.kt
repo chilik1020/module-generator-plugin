@@ -30,7 +30,7 @@ class SelectFileReducerImpl @Inject constructor(
                 }
 
             val file = selectedIndex?.let { files[it] }
-            val sampleCode = file?.content ?: "null"
+            val sampleCode = file?.content ?: String()
 
             copy(
                 selectedFileIndex = selectedIndex,

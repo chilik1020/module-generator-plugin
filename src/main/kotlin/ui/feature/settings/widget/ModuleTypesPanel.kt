@@ -13,7 +13,7 @@ import javax.swing.ListSelectionModel
 class ModuleTypesPanel : JPanel() {
 
     private val listModel = CollectionListModel<ModuleType>()
-    val list = JBList(listModel).apply {
+    private val list = JBList(listModel).apply {
         selectionMode = ListSelectionModel.SINGLE_SELECTION
     }
     private val toolbarDecorator: ToolbarDecorator = ToolbarDecorator.createDecorator(list)
@@ -23,7 +23,7 @@ class ModuleTypesPanel : JPanel() {
     private var listenersBlocked = false
 
     init {
-        border = IdeBorderFactory.createTitledBorder("Modules", false)
+        border = IdeBorderFactory.createTitledBorder(LABEL_MODULE_TYPES, false)
         layout = GridLayout(1, 1)
 
         toolbarDecorator.apply {
@@ -51,5 +51,9 @@ class ModuleTypesPanel : JPanel() {
             list.selectedIndex = state.selectedModuleIndex
         }
         listenersBlocked = false
+    }
+
+    companion object {
+        private const val LABEL_MODULE_TYPES = "Module types"
     }
 }

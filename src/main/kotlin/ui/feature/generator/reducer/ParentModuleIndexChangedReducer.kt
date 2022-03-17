@@ -9,6 +9,7 @@ import ui.feature.base.BaseReducer
 import ui.feature.generator.NewFeatureEffect
 import ui.feature.generator.NewFeatureState
 import util.buildPackage
+import util.packagePrefixByModuleType
 import javax.inject.Inject
 
 interface ParentModuleIndexChangedReducer {
@@ -26,13 +27,7 @@ class ParentModuleIndexChangedReducerImpl @Inject constructor(
     override fun invoke(index: Int) = pushState {
         val selectedModule = projectModules[index]
         val selectedModuleType = selectedModuleType ?: modulesTypes[0]
-        val packagePrefix = when (selectedModuleType) {
-            ModuleType.ANDROID_MODULE -> featureSettings.loadDefaultPackage()
-            ModuleType.FEATURE -> featureSettings.loadDefaultPackage()
-            ModuleType.KMM_MODULE -> featureSettings.loadDefaultKmmPackage()
-            ModuleType.KMM_FEATURE -> featureSettings.loadDefaultKmmPackage()
-            else -> featureSettings.loadDefaultPackage()
-        }
+        val packagePrefix = packagePrefixByModuleType(selectedModuleType, featureSettings)
         val basePackage = buildPackage(selectedModuleType, this, this.moduleName,packagePrefix)
         copy(
             selectedProjectModule = selectedModule,

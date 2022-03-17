@@ -22,7 +22,7 @@
     <actions>
         <action id="NewFeatureAction"
                 class="ui.feature.generator.NewFeatureAnAction"
-                text="PriorOnline Module..."
+                text="Prior Module..."
                 description="PriorOnline module generator plugin">
             <add-to-group group-id="NewProjectOrModuleGroup" anchor="after"
                           relative-to-action="NewProjectOrModuleGroup"/>

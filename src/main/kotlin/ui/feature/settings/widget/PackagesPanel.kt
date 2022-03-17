@@ -24,15 +24,15 @@ class PackagesPanel : JPanel() {
     init {
         layout = GridBagLayout()
 
-        add(JLabel("Base package:"), constraintsLeft(0, 0))
+        add(JLabel(LABEL_BASE_PACKAGE), constraintsLeft(0, 0))
         add(packageTextField, constraintsRight(1, 0))
         packageTextField.addTextChangeListener { if (!listenersBlocked) onPackageChanged?.invoke(it) }
 
-        add(JLabel("Kmm base package:"), constraintsLeft(0, 1))
+        add(JLabel(LABEL_KMM_BASE_PACKAGE), constraintsLeft(0, 1))
         add(kmmPackageTextField, constraintsRight(1, 1))
         kmmPackageTextField.addTextChangeListener { if (!listenersBlocked) onKmmPackageChanged?.invoke(it) }
 
-        add(JLabel("Kmm feature's submodules prefix:"), constraintsLeft(0, 2))
+        add(JLabel(LABEL_KMM_SUBMODULES_PREFIX), constraintsLeft(0, 2))
         add(kmmSubmodulePrefixTextField, constraintsRight(1, 2))
         kmmSubmodulePrefixTextField.addTextChangeListener { if (!listenersBlocked) onSubModulePrefixChanged?.invoke(it) }
     }
@@ -50,5 +50,11 @@ class PackagesPanel : JPanel() {
     override fun getPreferredSize(): Dimension? {
         val original = super.getPreferredSize()
         return Dimension(original.width, original.height)
+    }
+    
+    companion object {
+        private const val LABEL_BASE_PACKAGE = "Base package:"
+        private const val LABEL_KMM_BASE_PACKAGE = "Kmm base package:"
+        private const val LABEL_KMM_SUBMODULES_PREFIX = "Kmm feature's submodules prefix:"
     }
 }

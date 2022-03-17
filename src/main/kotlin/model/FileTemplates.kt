@@ -15,6 +15,17 @@ const val ANDROID_MANIFEST_FILE_NAME = "AndroidManifest"
 const val PRO_GUARD_TEMPLATE = "#"
 const val GIT_IGNORE_TEMPLATE = "/build"
 
+const val FOLDER_SRC_NAME = "src"
+const val FOLDER_RES_NAME = "res"
+const val FOLDER_MAIN_NAME = "main"
+const val FOLDER_KOTLIN_NAME = "kotlin"
+const val FOLDER_ANDROID_MAIN_NAME = "androidMain"
+const val FOLDER_COMMON_MAIN_NAME = "commonMain"
+const val FOLDER_IOS_MAIN_NAME = "iosMain"
+const val FOLDER_ASSETS_NAME = "assets"
+
+const val INCLUDE = "include"
+
 val MANIFEST_TEMPLATE = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
     "<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n" +
     "    package=\"${Variable.PACKAGE_NAME.value}\">\n" +

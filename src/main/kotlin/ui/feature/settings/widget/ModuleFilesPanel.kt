@@ -5,7 +5,6 @@ import com.intellij.ui.IdeBorderFactory
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import data.file.File
-import model.ModuleFiles
 import ui.feature.settings.FeatureSettingsState
 import java.awt.GridLayout
 import javax.swing.JPanel
@@ -14,7 +13,7 @@ import javax.swing.ListSelectionModel
 class ModuleFilesPanel : JPanel() {
 
     private val listModel = CollectionListModel<File>()
-    val list = JBList(listModel).apply {
+    private val list = JBList(listModel).apply {
         selectionMode = ListSelectionModel.SINGLE_SELECTION
     }
     private val toolbarDecorator: ToolbarDecorator = ToolbarDecorator.createDecorator(list)
@@ -24,7 +23,7 @@ class ModuleFilesPanel : JPanel() {
     private var listenersBlocked = false
 
     init {
-        border = IdeBorderFactory.createTitledBorder("Module files", false)
+        border = IdeBorderFactory.createTitledBorder(LABEL_MODULE_FILES, false)
         layout = GridLayout(1, 1)
         toolbarDecorator.apply {
             add(createPanel())
@@ -47,5 +46,9 @@ class ModuleFilesPanel : JPanel() {
             listModel.removeRange(state.selectedModule?.files?.size ?: 0, listModel.size - 1)
         }
         listenersBlocked = false
+    }
+    
+    companion object {
+        private const val LABEL_MODULE_FILES = "Module files"
     }
 }

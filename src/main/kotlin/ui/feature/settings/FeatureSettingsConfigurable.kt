@@ -52,10 +52,14 @@ class FeatureSettingsConfigurable(private val project: Project) : Configurable {
 
     override fun reset() = viewModel.reduce(FeatureSettingsAction.ResetSettings)
 
-    override fun getDisplayName() = "Prior Module Generator Plugin"
+    override fun getDisplayName() = SETTINGS_DISPLAY_NAME
 
     override fun disposeUIResources() {
         scope.cancel()
         super.disposeUIResources()
+    }
+    
+    companion object {
+        private const val SETTINGS_DISPLAY_NAME = "Prior module generator plugin"
     }
 }

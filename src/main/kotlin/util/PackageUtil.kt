@@ -1,5 +1,6 @@
 package util
 
+import data.repository.FeatureSettingsRepository
 import model.ModuleType
 import ui.feature.generator.NewFeatureState
 
@@ -27,3 +28,12 @@ private fun kmmModulePackage(state: NewFeatureState, moduleName: String, package
         "$packagePrefix.${it.nameWithoutPrefix}.$moduleName"
     }
 } ?: "$packagePrefix.$moduleName"
+
+fun packagePrefixByModuleType(moduleType: ModuleType, settingsRepository: FeatureSettingsRepository) =
+    when(moduleType) {
+        ModuleType.ANDROID_MODULE -> settingsRepository.loadDefaultPackage()
+        ModuleType.FEATURE -> settingsRepository.loadDefaultPackage()
+        ModuleType.KMM_MODULE -> settingsRepository.loadDefaultKmmPackage()
+        ModuleType.KMM_FEATURE -> settingsRepository.loadDefaultKmmPackage()
+        else -> settingsRepository.loadDefaultPackage()
+    }

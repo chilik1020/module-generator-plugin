@@ -28,7 +28,7 @@ class ProjectStructureImpl @Inject constructor(private val project: Project) : P
         ModuleManager.getInstance(project).findModuleByName(module.name)?.sourceRoots?.map {
             SourceRootImpl(project, it)
         }
-            ?: throw IllegalStateException("${module.name} module doesn't exist!")
+            ?: throw IllegalStateException("${module.name} $EXCEPTION_MODULE_NOT_EXITS")
 
     override fun findModuleRoot(module: Module) =
         ModuleManager.getInstance(project).findModuleByName(module.name)?.guessModuleDir()?.let {
@@ -36,7 +36,7 @@ class ProjectStructureImpl @Inject constructor(private val project: Project) : P
         }
 
     override fun findSettingsGradleFile(): PsiFile? =
-        project.guessProjectDir()?.findChild("settings.gradle")?.toPsiFile(project)
+        project.guessProjectDir()?.findChild(SETTINGS_GRADLE_FILE_NAME)?.toPsiFile(project)
 
     override fun getAllModules() = ModuleManager.getInstance(project).modules.map { it.name }
 
@@ -48,4 +48,9 @@ class ProjectStructureImpl @Inject constructor(private val project: Project) : P
         project.guessProjectDir()?.let {
             SourceRootImpl(project, it)
         }
+
+    companion object {
+        private const val SETTINGS_GRADLE_FILE_NAME = "settings.gradle"
+        private const val EXCEPTION_MODULE_NOT_EXITS = "module doesn't exist!"
+    }
 }

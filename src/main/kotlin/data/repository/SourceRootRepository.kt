@@ -3,7 +3,7 @@ package data.repository
 import com.intellij.psi.PsiFile
 import data.file.ProjectStructure
 import data.file.SourceRoot
-import model.Module
+import model.*
 import javax.inject.Inject
 
 interface SourceRootRepository {
@@ -22,18 +22,18 @@ class SourceRootRepositoryImpl @Inject constructor(
     override fun findCodeSourceRoot(module: Module, sourceSet: String) =
         projectStructure.findSourceRoots(module).firstOrNull {
             val pathTrimmed = it.path.removeModulePathPrefix(module)
-            pathTrimmed.contains("src", true)
+            pathTrimmed.contains(FOLDER_SRC_NAME, true)
                 && pathTrimmed.contains(sourceSet)
-                && !pathTrimmed.contains("assets", true)
-                && !pathTrimmed.contains("res", true)
+                && !pathTrimmed.contains(FOLDER_ASSETS_NAME, true)
+                && !pathTrimmed.contains(FOLDER_RES_NAME, true)
         }
 
     override fun findResourcesSourceRoot(module: Module) =
         projectStructure.findSourceRoots(module).firstOrNull {
             val pathTrimmed = it.path.removeModulePathPrefix(module)
-            pathTrimmed.contains("src", true)
-                && pathTrimmed.contains("main", true)
-                && pathTrimmed.contains("res", true)
+            pathTrimmed.contains(FOLDER_SRC_NAME, true)
+                && pathTrimmed.contains(FOLDER_MAIN_NAME, true)
+                && pathTrimmed.contains(FOLDER_RES_NAME, true)
         }
 
     override fun findModuleSourceRoot(module: Module): SourceRoot? =

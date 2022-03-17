@@ -23,7 +23,6 @@ class ApplyFeatureSettingReducerImpl @Inject constructor(
 ) : BaseReducer<FeatureSettingsState, FeatureSettingsEffect>(state, effect, scope), ApplyFeatureSettingsReducer {
 
     override fun invoke() {
-        println("Apply settings")
         val newSettings = state.value.run {
             FeatureSettings(
                 modules = modules.map { it.moduleType }.toMutableList(),
