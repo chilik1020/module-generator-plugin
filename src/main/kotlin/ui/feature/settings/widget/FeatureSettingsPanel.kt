@@ -6,6 +6,7 @@ import model.FileType
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import ui.feature.settings.FeatureSettingsState
 import java.awt.BorderLayout
+import java.awt.Dimension
 import javax.swing.BoxLayout
 import javax.swing.JPanel
 
@@ -37,15 +38,20 @@ class FeatureSettingsPanel(project: Project) : JPanel() {
                 })
             }
 
-            add(topPanel, BorderLayout.PAGE_START)
+            add(topPanel, BorderLayout.NORTH)
 
             add(JPanel().apply {
                 layout = BoxLayout(this, BoxLayout.Y_AXIS)
                 add(codePanel)
-            }, BorderLayout.CENTER)
+            }, BorderLayout.SOUTH)
         }
 
-        add(contentPanel, BorderLayout.CENTER)
+        add(contentPanel, BorderLayout.PAGE_START)
+    }
+
+    override fun getPreferredSize(): Dimension? {
+        val original = super.getPreferredSize()
+        return Dimension(original.width, 800)
     }
 
     fun render(state: FeatureSettingsState) {

@@ -37,6 +37,7 @@ class CodePanel(
         JPanel().apply {
             border = IdeBorderFactory.createTitledBorder(LABEL_CODE_TEMPLATE, true)
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
+            templateTextField.size = Dimension(preferredSize.width, 900)
             add(JBScrollPane(templateTextField))
         }
 
@@ -64,7 +65,7 @@ class CodePanel(
 
     override fun getPreferredSize(): Dimension? {
         val original = super.getPreferredSize()
-        return Dimension(original.width, 400)
+        return Dimension(original.width, 1000)
     }
 
     companion object {
