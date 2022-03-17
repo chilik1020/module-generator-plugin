@@ -6,6 +6,17 @@
 
     <description><![CDATA[
     PriorOnline module generator plugin.<br><br>
+
+    Plugin helps to create project modules(package hierarchy, Manifest, build gradle file, git ignore, etc..).
+    Module types:
+    <ul>
+    <li>Simple android module</li>
+    <li>Feature module(contains domain and presentation simple submodules)</li>
+    <li>Simple kmm module</li>
+    <li>Kmm feature module(contains gateway, domain, presentation simple kmm submodules)</li>
+    </ul>
+    And you can change files content, base packages and etc in settings
+    (File -> Settings -> Other settings -> Prior module generator plugin).<br><br>
     ]]></description>
 
     <depends>com.intellij.modules.lang</depends>
